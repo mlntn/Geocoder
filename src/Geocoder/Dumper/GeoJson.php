@@ -22,6 +22,11 @@ class GeoJson implements Dumper
      */
     public function dump(Address $address)
     {
+        return $this->build($address);
+    }
+
+    public function build(Address $address)
+    {
         $properties = array_filter($address->toArray(), function ($value) {
             return !empty($value);
         });
@@ -32,25 +37,35 @@ class GeoJson implements Dumper
             $properties['bounds']
         );
 
+        if (array_key_exists('adminLevels', $properties)) {
+            $levels = [];
+            foreach ($properties['adminLevels'] as $k => $a) {
+                $levels[] = array_merge($a, ['level' => $k]);
+            }
+            $properties['adminLevels'] = $levels;
+        }
+
         if (0 === count($properties)) {
             $properties = null;
         }
 
-        $json = [
-            'type' => 'Feature',
-            'geometry' => [
-                'type'          => 'Point',
-                'coordinates'   => [ $address->getLongitude(), $address->getLatitude() ]
-            ],
-            'properties' => $properties,
+        $data = [
+          'type' => 'Feature',
+          'geometry' => [
+            'type'          => 'Point',
+            'coordinates'   => [ $address->getLongitude(), $address->getLatitude() ]
+          ],
+          'properties' => $properties,
         ];
 
         if (null !== $bounds = $address->getBounds()) {
             if ($bounds->isDefined()) {
-                $json['bounds'] = $bounds->toArray();
+                $data['bounds'] = $bounds->toArray();
             }
         }
 
-        return json_encode($json);
+        return $data;
     }
+
 }
+

@@ -189,6 +189,8 @@ class GoogleMaps extends AbstractHttpProvider implements LocaleAwareProvider
             $resultSet['latitude']  = $coordinates->lat;
             $resultSet['longitude'] = $coordinates->lng;
 
+            $resultSet['formatted_address'] = $result->formatted_address;
+
             $resultSet['bounds'] = null;
             if (isset($result->geometry->bounds)) {
                 $resultSet['bounds'] = array(
@@ -230,7 +232,6 @@ class GoogleMaps extends AbstractHttpProvider implements LocaleAwareProvider
                 break;
 
             case 'locality':
-            case 'postal_town':
                 $resultSet['locality'] = $values->long_name;
                 break;
 
@@ -269,3 +270,4 @@ class GoogleMaps extends AbstractHttpProvider implements LocaleAwareProvider
         return $resultSet;
     }
 }
+

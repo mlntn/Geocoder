@@ -54,7 +54,8 @@ final class AddressFactory
                     $this->readStringValue($result, 'country'),
                     $this->upperize(\igorw\get_in($result, ['countryCode']))
                 ),
-                \igorw\get_in($result, ['timezone'])
+                \igorw\get_in($result, ['timezone']),
+                $this->readStringValue($result, 'formatted_address')
             );
         }
 
@@ -124,3 +125,4 @@ final class AddressFactory
         return new Coordinates((double) $latitude, (double) $longitude);
     }
 }
+

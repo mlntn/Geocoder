@@ -66,6 +66,11 @@ final class Address
     private $timezone;
 
     /**
+     * @var string
+     */
+    private $formatted;
+
+    /**
      * @param string $streetNumber
      * @param string $streetName
      * @param string $postalCode
@@ -82,7 +87,8 @@ final class Address
         $subLocality                      = null,
         AdminLevelCollection $adminLevels = null,
         Country $country                  = null,
-        $timezone                         = null
+        $timezone                         = null,
+        $formatted                        = null
     ) {
         $this->coordinates  = $coordinates;
         $this->bounds       = $bounds;
@@ -94,6 +100,7 @@ final class Address
         $this->adminLevels  = $adminLevels ?: new AdminLevelCollection();
         $this->country      = $country;
         $this->timezone     = $timezone;
+        $this->formatted    = $formatted;
     }
 
     /**
@@ -236,6 +243,16 @@ final class Address
     }
 
     /**
+     * Returns the formatted address.
+     *
+     * @return string
+     */
+    public function getFormatted()
+    {
+        return $this->formatted;
+    }
+
+    /**
      * Returns an array with data indexed by name.
      *
      * @return array
@@ -263,6 +280,8 @@ final class Address
             'country'      => $this->country->getName(),
             'countryCode'  => $this->country->getCode(),
             'timezone'     => $this->timezone,
+            'formatted'    => $this->formatted,
         );
     }
 }
+
